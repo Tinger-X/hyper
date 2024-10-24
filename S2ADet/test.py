@@ -166,7 +166,10 @@ def test(data,
                                  "scores": {"class_score": conf},
                                  "domain": "pixel"} for *xyxy, conf, cls in pred.tolist()]
                     boxes = {"predictions": {"box_data": box_data, "class_labels": names}}  # inference-space
-                    wandb_images.append(wandb_logger.wandb.Image(img[si], boxes=boxes, caption=path.name))
+                    image_ndarray = img[si].permute(1, 2, 0).cpu().numpy().astype(np.uint8)
+                    rgb1, rgb2 = image_ndarray[:, :, :3], image_ndarray[:, :, 3:]
+                    wandb_images.append(wandb_logger.wandb.Image(rgb1, boxes=boxes, caption=path.name))
+                    wandb_images.append(wandb_logger.wandb.Image(rgb2, boxes=boxes, caption=path.name))
             wandb_logger.log_training_progress(predn, path, names) if wandb_logger and wandb_logger.wandb_run else None
 
             # Append to pycocotools JSON dictionary

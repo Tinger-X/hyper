@@ -497,8 +497,9 @@ def train_rgb_ir(hyp, opt, device, tb_writer=None):
     loggers = {'wandb': None}  # loggers dict
     if rank in [-1, 0]:
         opt.hyp = hyp  # add hyperparameters
-        run_id = torch.load(weights, weights_only=False).get('wandb_id') if weights.endswith('.pt') and os.path.isfile(
-            weights) else None
+        run_id = None
+        if weights.endswith('.pt') and os.path.isfile(weights):
+            run_id = torch.load(weights, weights_only=False).get('wandb_id')
         wandb_logger = WandbLogger(opt, save_dir.stem, run_id, data_dict)
         loggers['wandb'] = wandb_logger.wandb
         data_dict = wandb_logger.data_dict
