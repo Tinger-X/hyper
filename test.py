@@ -232,7 +232,8 @@ def test(
     # Print results per class
     if (verbose or (nc < 50 and not training)) and nc > 1 and len(stats):
         for i, c in enumerate(ap_class):
-            print(pf % (names[c], seen, nt[c], p[i], r[i], ap50[i], ap75[i], ap[i]))
+            name = getattr(names, c, "Tinger")
+            print(pf % (name, seen, nt[c], p[i], r[i], ap50[i], ap75[i], ap[i]))
 
     # Print speeds
     t = tuple(x / seen * 1E3 for x in (t0, t1, t0 + t1)) + (imgsz, imgsz, batch_size)  # tuple
@@ -302,15 +303,13 @@ if __name__ == '__main__':
     parser.add_argument('--save-hybrid', action='store_true', help='save label+prediction hybrid results to *.txt')
     parser.add_argument('--save-conf', default=True, action='store_true', help='save confidences in --save-txt labels')
     parser.add_argument('--save-json', action='store_true', help='save a cocoapi-compatible JSON results file')
-    parser.add_argument('--project', default='', help='save to project/name')
-    # parser.add_argument('--project', default='runs/test', help='save to project/name')
+    parser.add_argument('--project', default='runs/test', help='save to project/name')
     parser.add_argument('--name', default='exp', help='save to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     opt = parser.parse_args()
     opt.save_json |= opt.data.endswith('coco.yaml')
     opt.data = check_file(opt.data)  # check file
     print(opt)
-    print(opt.data)
     check_requirements()
 
     if opt.task in ('train', 'val', 'test'):  # run normally

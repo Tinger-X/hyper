@@ -11,10 +11,10 @@ download: https://github.com/ultralytics/yolov5/releases/download/v1.0/coco128.z
 
 # train and val data as 1) directory: path/images/, 2) file: path/images.txt, or 3) list: [path1/images/, path2/images/]
 
-train_rgb: ../Dataset/hod_1/rgb/images/train/  # 128 images
-val_rgb: ../Dataset/hod_1/rgb/images/test/ # 128 images
-train_ir: ../Dataset/hod_1/ir/images/train/  # 128 images
-val_ir:  ../Dataset/hod_1/ir/images/test/ # 128 images
+train_rgb: ./Dataset/hod_1/rgb/images/trainval/  # 128 images
+val_rgb: ./Dataset/hod_1/rgb/images/test/ # 128 images
+train_ir: ./Dataset/hod_1/ir/images/trainval/  # 128 images
+val_ir:  ./Dataset/hod_1/ir/images/test/ # 128 images
 
 # fan guo lai
 
@@ -24,7 +24,7 @@ val_ir:  ../Dataset/hod_1/ir/images/test/ # 128 images
 # val_rgb:  /data/multispectral-object-detection/dataset/FLIR_ADAS_1_3/ir/images/val_ir/ # 128 images
 
 # number of classes
-nc: 4
+nc: 8
 
 # class names
-names: [ 'people','bike','worker','car']
+names: ['toyblock_screen_hy','photo_screen_hy','pen_screen_hy','photo_real_hy','toyblock_real_hy','pen_real_hy','leaf_screen_hy','leaf_real_hy']

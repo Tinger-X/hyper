@@ -1,8 +1,11 @@
 .git
+.idea
 *__pycache__
 Dataset/**/*.cache
-S2ADet/runsx3
-S2ADet/wandb
-S2ADet/weights
-S2ADet/yolo_weight
-S2ADet/sa_se_image_generate.zip
+
+runs
+wandb
+weights
+yolo_weight
+sa_se_image_generate.zip
+just-play-play.py
