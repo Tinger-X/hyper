@@ -18,28 +18,15 @@ from utils.plots import plot_images, output_to_target, plot_study_txt
 from utils.torch_utils import select_device, time_synchronized
 
 
-def test(data,
-         weights=None,
-         batch_size=32,
-         imgsz=640,
-         conf_thres=0.001,
-         iou_thres=0.6,  # for NMS
-         save_json=False,
-         single_cls=False,
-         augment=False,
-         verbose=False,
-         model=None,
-         dataloader=None,
-         save_dir=Path(''),  # for saving images
-         save_txt=False,  # for auto-labelling
-         save_hybrid=False,  # for hybrid auto-labelling
-         save_conf=True,  # save auto-label confidences
-         plots=False,
-         wandb_logger=None,
-         compute_loss=None,
-         half_precision=True,
-         is_coco=False,
-         opt=None):
+def test(
+        data, weights=None, batch_size=32, imgsz=640, conf_thres=0.001, iou_thres=0.6,  # for NMS
+        save_json=False, single_cls=False, augment=False, verbose=False, model=None,
+        dataloader=None, save_dir=Path(''),  # for saving images
+        save_txt=False,  # for auto-labelling
+        save_hybrid=False,  # for hybrid auto-labelling
+        save_conf=True,  # save auto-label confidences
+        plots=False, wandb_logger=None, compute_loss=None, half_precision=True, is_coco=False, opt=None
+):
     # Initialize/load model and set device
     training = model is not None
     if training:  # called by train.py
@@ -91,7 +78,7 @@ def test(data,
         val_path_rgb = data['val_rgb']
         val_path_ir = data['val_ir']
         dataloader = create_dataloader_rgb_ir(val_path_rgb, val_path_ir, imgsz, batch_size, gs, opt, pad=0.5, rect=True,
-                                       prefix=colorstr(f'{task}: '))[0]
+                                              prefix=colorstr(f'{task}: '))[0]
 
     seen = 0
     confusion_matrix = ConfusionMatrix(nc=nc)
@@ -102,7 +89,7 @@ def test(data,
     loss = torch.zeros(3, device=device)
     jdict, stats, ap, ap_class, wandb_images = [], [], [], [], []
     for batch_i, (img, targets, paths, shapes) in enumerate(tqdm(dataloader, desc=s)):
-    # for batch_i, (img, targets, paths, shapes) in enumerate(tqdm(testloader, desc=s)):
+        # for batch_i, (img, targets, paths, shapes) in enumerate(tqdm(testloader, desc=s)):
         img = img.to(device, non_blocking=True)
         img = img.half() if half else img.float()  # uint8 to fp16/32
         img /= 255.0  # 0 - 255 to 0.0 - 1.0
@@ -301,7 +288,7 @@ def test(data,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='test.py')
     parser.add_argument('--weights', nargs='+', type=str, default='./weights/best.pt', help='model.pt path(s)')
-    parser.add_argument('--data', type=str, default='./data/hsi/hsime-ir.yaml', help='*.data path')
+    parser.add_argument('--data', type=str, default='./data/hsi/hsirs.yaml', help='*.data path')
     parser.add_argument('--batch-size', type=int, default=32, help='size of each image batch')
     parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.001, help='object confidence threshold')
@@ -327,33 +314,16 @@ if __name__ == '__main__':
     check_requirements()
 
     if opt.task in ('train', 'val', 'test'):  # run normally
-        test(opt.data,
-             opt.weights,
-             opt.batch_size,
-             opt.img_size,
-             opt.conf_thres,
-             opt.iou_thres,
-             opt.save_json,
-             opt.single_cls,
-             opt.augment,
-             opt.verbose,
-             save_txt=opt.save_txt | opt.save_hybrid,
-             save_hybrid=opt.save_hybrid,
-             save_conf=opt.save_conf,
-             opt=opt
-             )
-    # results, maps, times = test.test(data_dict,
-    #                                  batch_size=batch_size * 2,
-    #                                  imgsz=imgsz_test,
-    #                                  model=ema.ema,
-    #                                  single_cls=opt.single_cls,
-    #                                  dataloader=testloader,
-    #                                  save_dir=save_dir,
-    #                                  verbose=nc < 50 and final_epoch,
-    #                                  plots=plots and final_epoch,
-    #                                  wandb_logger=wandb_logger,
-    #                                  compute_loss=compute_loss,
-    #                                  is_coco=is_coco)
+        test(
+            opt.data, opt.weights, opt.batch_size, opt.img_size, opt.conf_thres, opt.iou_thres,
+            opt.save_json, opt.single_cls, opt.augment, opt.verbose, save_txt=opt.save_txt | opt.save_hybrid,
+            save_hybrid=opt.save_hybrid, save_conf=opt.save_conf, opt=opt
+        )
+        # results, maps, times = test.test(
+        #     data_dict, batch_size=batch_size * 2, imgsz=imgsz_test, model=ema.ema, single_cls=opt.single_cls,
+        #     dataloader=testloader, save_dir=save_dir, verbose=nc < 50 and final_epoch, plots=plots and final_epoch,
+        #     wandb_logger=wandb_logger, compute_loss=compute_loss, is_coco=is_coco
+        # )
 
     elif opt.task == 'speed':  # speed benchmarks
         for w in opt.weights:

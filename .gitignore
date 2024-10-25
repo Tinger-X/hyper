@@ -3,4 +3,6 @@
 Dataset/**/*.cache
 S2ADet/runsx3
 S2ADet/wandb
+S2ADet/weights
+#S2ADet/yolo_weight
 S2ADet/sa_se_image_generate.zip

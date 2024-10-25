@@ -161,7 +161,7 @@ def plot_images(images, targets, paths=None, fname='images.jpg', names=None, max
         if scale_factor < 1:
             img = cv2.resize(img, (w, h))
 
-        mosaic[block_y:block_y + h, block_x:block_x + w, :] = img
+        mosaic[block_y:block_y + h, block_x:block_x + w, :] = img[:, :, :3]
         if len(targets) > 0:
             image_targets = targets[targets[:, 0] == i]
             boxes = xywh2xyxy(image_targets[:, 2:6]).T
