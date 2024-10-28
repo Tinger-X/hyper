@@ -68,7 +68,7 @@ def train(hyp, opt, device, tb_writer=None):
         data_dict = yaml.safe_load(f)  # data dict
     is_coco = opt.data.endswith('coco.yaml')
 
-    # Logging- Doing this before checking the dataset. Might update data_dict
+    # Logging-Doing this before checking the dataset. Might update data_dict
     loggers = {'wandb': None}  # loggers dict
     if rank in [-1, 0]:
         opt.hyp = hyp  # add hyperparameters
@@ -910,11 +910,13 @@ def train_rgb_ir(hyp, opt, device, tb_writer=None):
     return results
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', type=str, default='./yolo_weight/yolov5l.pt', help='initial weights path')
-    parser.add_argument('--cfg', type=str, default='./models/hsi/yolov5l_fusion_transformerx3_hsi.yaml',
-                        help='model.yaml path')
+    parser.add_argument(
+        '--cfg', type=str, help='model.yaml path',
+        default='./models/hsi/yolov5l_fusion_transformerx3_hsi.yaml'
+    )
     parser.add_argument('--data', type=str, default='./data/hsi/hsi_twostream.yaml', help='data.yaml path')
     parser.add_argument('--hyp', type=str, default='data/hyp.finetune.yaml', help='hyperparameters path')
     parser.add_argument('--epochs', type=int, default=100)
@@ -949,7 +951,7 @@ if __name__ == '__main__':
     parser.add_argument('--artifact_alias', type=str, default="latest", help='version of dataset artifact to be used')
     opt = parser.parse_args()
 
-    # FQY  Flag for visualizing the paired training imgs
+    # FQY Flag for visualizing the paired training imgs
     global_var._init()
     global_var.set_value('flag_visual_training_dataset', False)
 
@@ -1037,8 +1039,8 @@ if __name__ == '__main__':
             'flipud': (1, 0.0, 1.0),  # image flip up-down (probability)
             'fliplr': (0, 0.0, 1.0),  # image flip left-right (probability)
             'mosaic': (1, 0.0, 1.0),  # image mixup (probability)
-            'mixup': (1, 0.0, 1.0)
-        }  # image mixup (probability)
+            'mixup': (1, 0.0, 1.0)  # image mixup (probability)
+        }
 
         assert opt.local_rank == -1, 'DDP mode not implemented for --evolve'
         opt.notest, opt.nosave = True, True  # only test/save final epoch
@@ -1087,5 +1089,11 @@ if __name__ == '__main__':
 
         # Plot results
         plot_evolution(yaml_file)
-        print(f'Hyperparameter evolution complete. Best results saved as: {yaml_file}\n'
-              f'Command to train a new model with these hyperparameters: $ python train.py --hyp {yaml_file}')
+        print(
+            f'Hyperparameter evolution complete. Best results saved as: {yaml_file}\n'
+            f'Command to train a new model with these hyperparameters: $ python train.py --hyp {yaml_file}'
+        )
+
+
+if __name__ == '__main__':
+    main()
