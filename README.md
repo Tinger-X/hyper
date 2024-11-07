@@ -177,8 +177,8 @@ If this is useful for your research, please consider cite.
      ```text
      # 下载连接：
      # 1. HOD3K: https://pan.baidu.com/s/16ofE5ljzvNCFU_NO43xE6Q，提取码：gvbe
-     # 1. 原始数据: https://pan.baidu.com/s/1ga-YqLqTqVxTbnHHjch82g，提取码：qugy
-     # 1. HSI-1: https://pan.baidu.com/s/1BuR9FCkoZEj1Czd4XVFKAA，提取码：my1z
+     # 2. 原始数据: https://pan.baidu.com/s/1ga-YqLqTqVxTbnHHjch82g，提取码：qugy
+     # 3. HSI-1: https://pan.baidu.com/s/1BuR9FCkoZEj1Czd4XVFKAA，提取码：my1z
      
      # 下载后文件目录：
      Dataset
@@ -254,3 +254,27 @@ If this is useful for your research, please consider cite.
    python detect_twostream.py
    ```
 
+
+# 复现2.0
+1. 克隆项目：`git clone https://github.com/Tinger-X/hyper`
+2. 安装依赖：
+   ```bash
+   # 进入虚拟python环境，略
+   # 进入hyper[S2ADet]项目
+   cd /path/to/tinger-x/hyper
+   # yolo
+   pip install -r yolov5/requirements.txt
+   # S2ADet
+   pip install -r requirements.txt
+   # 单独安装 pytorch，注意cuda版本，可以从pytorch官网选择安装方案
+   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
+   ```
+3. 启动训练
+   ```bash
+   # 1.训练
+   python train.py --epochs 20 --batch-size 8
+   # 2.测试
+   python test.py
+   # 3.推理
+   python detect_twostream.py
+   ```
