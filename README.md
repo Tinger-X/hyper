@@ -136,94 +136,121 @@ If this is useful for your research, please consider cite.
 1. 下载与安装
    + 进入合适工作目录：`cd /path/to/my/work-dir`
    + 下载项目：`git clone https://github.com/hexiao0275/S2ADet`
-   + 下载yolo-v5：`cd S2ADet && git clone https://github.com/ultralytics/yolov5.git`
+   + 下载yolo-v5：
+     ```bash
+     # 进入 S2ADet，将yolo-v5克隆到其子目录中
+     cd S2ADet
+     # 下载yolo-v5
+     git clone https://github.com/ultralytics/yolov5.git
+     ```
+
    + 准备环境：
-    ```bash
-    # 1.事先进入目标 python 环境，略
-    # 2.安装 S2ADet 依赖
-    pip install -r S2ADet/requirements.txt
-    # 3.安装 YOLO-v5 依赖
-    # 先注释 yolov5/requirements.txt中关于 pytorch 的依赖：`torch torchvision`
-    pip install -r yolov5/requirements.txt
-    # 4.单独安装GPU版 pytorch，yolo默认为CPU版
-    pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
-    # 5.安装wandb
-    pip install wandb
-   ```
-    + 下载预训练模型：全部放入 `S2ADet/yolo_weight` 文件夹
-      + [yolo-v5s](https://drive.google.com/file/d/1UGAsaOvV7jVrk0RvFVYL6Vq0K7NQLD8H/view?usp=sharing)
-      + [yolo-v5m](https://drive.google.com/file/d/1qB7L2vtlGppGjHp5xpXCKw14YHhbV4s1/view?usp=sharing)
-      + [yolo-v5l](https://drive.google.com/file/d/12OFGLF73CqTgOCMJAycZ8lB4eW19D0nb/view?usp=sharing)
-      + [yolo-v5x](https://drive.google.com/file/d/1e9xiQImx84KFQ_a7XXpn608I3rhRmKEn/view?usp=sharing)
-    + 下载数据集，全部放入 `S2ADet/Dataset`，完成之后一定要先删除 `*.cache` 文件，其中缓存的是绝对路径，文件目录：
-      + hod_1
-        + ir
-          + images
-            + test
-            + train
-            + trainval
-            + val
-          + labels
-            + test
-            + train
-            + trainval
-            + val
-            + test.cache
-        + rgb
-          + images
-            + test
-            + train
-            + trainval
-            + val
-          + labels
-            + test
-            + train
-            + trainval
-            + val
-            + test.cache
-      + hsi_dataset
-        + HSI
-          + test
-          + val
-        + hsidetection
-          + sa_information
-            + images
-              + test
-              + train
-              + val
-            + labels
-              + test
-              + train
-              + val
-              + test.cache
-              + train.cache
-          + se_information
-            + images
-              + test
-              + train
-              + val
-            + labels
-              + test
-              + train
-              + val
-              + test.cache
-              + train.cache
-      + raw_hsi_train
-        + ...
+     ```bash
+     # 1.事先进入目标 python 环境，略
+     # 2.安装 S2ADet 依赖
+     pip install -r S2ADet/requirements.txt
+     # 3.安装 YOLO-v5 依赖
+     # 先注释 yolov5/requirements.txt中关于 pytorch 的依赖：`torch torchvision`
+     pip install -r yolov5/requirements.txt
+     # 4.单独安装GPU版 pytorch，yolo默认为CPU版
+     pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
+     # 5.安装wandb
+     pip install wandb
+     ```
+
+   + 下载预训练模型：全部放入 `S2ADet/yolo_weight` 文件夹
+     ```text
+     # 1. yolo-v5s：
+     https://drive.google.com/file/d/1UGAsaOvV7jVrk0RvFVYL6Vq0K7NQLD8H/view?usp=sharing
+    
+     # 2. yolo-v5m
+     https://drive.google.com/file/d/1qB7L2vtlGppGjHp5xpXCKw14YHhbV4s1/view?usp=sharing
+    
+     # 3. yolo-v5l
+     https://drive.google.com/file/d/12OFGLF73CqTgOCMJAycZ8lB4eW19D0nb/view?usp=sharing
+    
+     # 4. yolo-v5x
+     https://drive.google.com/file/d/1e9xiQImx84KFQ_a7XXpn608I3rhRmKEn/view?usp=sharing
+     ```
+
+   + 下载数据集，全部放入 `S2ADet/Dataset`，完成之后一定要先删除 `*.cache` 文件，其中缓存的是绝对路径，文件目录：
+     ```text
+     # 下载连接：
+     # 1. HOD3K: https://pan.baidu.com/s/16ofE5ljzvNCFU_NO43xE6Q，提取码：gvbe
+     # 1. 原始数据: https://pan.baidu.com/s/1ga-YqLqTqVxTbnHHjch82g，提取码：qugy
+     # 1. HSI-1: https://pan.baidu.com/s/1BuR9FCkoZEj1Czd4XVFKAA，提取码：my1z
+     
+     # 下载后文件目录：
+     Dataset
+       ├─hod_1
+       │  ├─ir
+       │  │  ├─images
+       │  │  │  ├─test (*.jpg)
+       │  │  │  ├─train (*.jpg)
+       │  │  │  ├─trainval (*.jpg)
+       │  │  │  └─val (*.jpg)
+       │  │  └─labels
+       │  │      ├─test (*.txt)
+       │  │      ├─train (*.txt)
+       │  │      ├─trainval (*.txt)
+       │  │      ├─val (*.txt)
+       │  │      └─*.cache (!删除)
+       │  └─rgb
+       │      ├─images
+       │      │  ├─test (*.jpg)
+       │      │  ├─train (*.jpg)
+       │      │  ├─trainval (*.jpg)
+       │      │  └─val (*.jpg)
+       │      └─labels
+       │          ├─test (*.txt)
+       │          ├─train (*.txt)
+       │          ├─trainval (*.txt)
+       │          ├─val (*.txt)
+       │          └─*.cache (*.txt)
+       ├─hsi_dataset
+       │  ├─HSI
+       │  │  ├─test (*.png)
+       │  │  └─val (*.png)
+       │  └─hsidetection
+       │      ├─sa_information
+       │      │  ├─images
+       │      │  │  ├─test (*.jpg)
+       │      │  │  ├─train (*.jpg)
+       │      │  │  └─val (*.jpg)
+       │      │  └─labels
+       │      │      ├─test (*.txt)
+       │      │      ├─train (*.txt)
+       │      │      ├─val (*.txt)
+       │      │      └─*.cache (!删除)
+       │      └─se_information
+       │      │  ├─images
+       │      │  │  ├─test (*.jpg)
+       │      │  │  ├─train (*.jpg)
+       │      │  │  └─val (*.jpg)
+       │      │  └─labels
+       │      │      ├─test (*.txt)
+       │      │      ├─train (*.txt)
+       │      │      ├─val (*.txt)
+       │      │      └─*.cache (!删除)
+       └─raw_hsi_train (*.png)
+     ```
+
 2. 修改文件
-    + 修改 `yaml` 配置文件：将 `S2ADet/data/hsi` 文件夹下的所有 `yaml` 文件中的路径替换为自己电脑的路径，源文件为绝对路径
-    + 修改 `train.py`、`test.py`、`detect_twostream.py`文件中 `arguments` 里关于路径的默认值，源文件为绝对路径
+   + 修改 `yaml` 配置文件：将 `S2ADet/data/hsi` 文件夹下的所有 `yaml` 文件中的路径替换为自己电脑的路径，源文件为绝对路径
+   + 修改 `train.py`、`test.py`、`detect_twostream.py`文件中 `arguments` 里关于路径的默认值，源文件为绝对路径
+
 3. wandb：
-    + 注册前往 [wandb官网](https://wandb.ai) 注册账号
-    + 访问 [授权码页面](https://wandb.ai/authorize) 获取授权码
-    + 本地登录wandb：`wandb login`，之后输入授权码即可实现登录
+   + 前往 [wandb官网](https://wandb.ai) 注册账号
+   + 访问 [授权码页面](https://wandb.ai/authorize) 获取授权码
+   + 本地登录wandb：`wandb login`，之后输入授权码即可实现登录
+
 4. 启动训练
    ```bash
-    # 1.训练
-    python train.py --epochs 20 --batch-size 8
-    # 2.测试
-    python test.py
-    # 3.推理
-    python detect_twostream.py
-    ```
+   # 1.训练
+   python train.py --epochs 20 --batch-size 8
+   # 2.测试
+   python test.py
+   # 3.推理
+   python detect_twostream.py
+   ```
 
