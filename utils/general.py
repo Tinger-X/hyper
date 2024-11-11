@@ -35,7 +35,8 @@ os.environ['NUMEXPR_MAX_THREADS'] = str(min(os.cpu_count(), 8))  # NumExpr max t
 def set_logging(rank=-1, verbose=True):
     logging.basicConfig(
         format="%(message)s",
-        level=logging.INFO if (verbose and rank in [-1, 0]) else logging.WARN)
+        level=logging.INFO if (verbose and rank in [-1, 0]) else logging.WARN
+    )
 
 
 def init_seeds(seed=0):
@@ -222,9 +223,9 @@ def one_cycle(y1=0.0, y2=1.0, steps=100):
     return lambda x: ((1 - math.cos(x * math.pi / steps)) / 2) * (y2 - y1) + y1
 
 
-def colorstr(*input):
+def colorstr(*args):
     # Colors a string https://en.wikipedia.org/wiki/ANSI_escape_code, i.e.  colorstr('blue', 'hello world')
-    *args, string = input if len(input) > 1 else ('blue', 'bold', input[0])  # color arguments, string
+    *keys, string = args if len(args) > 1 else ('blue', 'bold', args[0])  # color arguments, string
     colors = {'black': '\033[30m',  # basic colors
               'red': '\033[31m',
               'green': '\033[32m',
@@ -244,7 +245,7 @@ def colorstr(*input):
               'end': '\033[0m',  # misc
               'bold': '\033[1m',
               'underline': '\033[4m'}
-    return ''.join(colors[x] for x in args) + f'{string}' + colors['end']
+    return ''.join(colors[x] for x in keys) + f'{string}' + colors['end']
 
 
 def labels_to_class_weights(labels, nc=80):

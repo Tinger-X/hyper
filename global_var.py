@@ -1,9 +1,3 @@
-# @Time : 2021/6/22 下午4:46 
-# @Author : Richard FANG
-# @File : global_var.py.py 
-# @Software: PyCharm
-
-
 def _init():  # 初始化
     global _global_dict
     _global_dict = {}

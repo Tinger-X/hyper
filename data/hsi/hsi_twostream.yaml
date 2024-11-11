@@ -27,4 +27,4 @@ val_ir: ./Dataset/hsi_dataset/hsidetection/sa_information/images/test/ # 128 ima
 nc: 4
 
 # class names
-names: [ 'people','bike','worker','car' ]
+names: ["people", "bike", "worker", "car"]

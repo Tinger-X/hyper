@@ -232,8 +232,8 @@ def test(
     # Print results per class
     if (verbose or (nc < 50 and not training)) and nc > 1 and len(stats):
         for i, c in enumerate(ap_class):
-            name = getattr(names, c, "Tinger")
-            print(pf % (name, seen, nt[c], p[i], r[i], ap50[i], ap75[i], ap[i]))
+            # name = names.get(c, "Null-Type")
+            print(pf % (names[c], seen, nt[c], p[i], r[i], ap50[i], ap75[i], ap[i]))
 
     # Print speeds
     t = tuple(x / seen * 1E3 for x in (t0, t1, t0 + t1)) + (imgsz, imgsz, batch_size)  # tuple
@@ -289,7 +289,7 @@ def test(
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='test.py')
     parser.add_argument('--weights', nargs='+', type=str, default='./weights/best.pt', help='model.pt path(s)')
-    parser.add_argument('--data', type=str, default='./data/hsi/hsirs.yaml', help='*.data path')
+    parser.add_argument('--data', type=str, default='./data/hsi/hsi_twostream.yaml', help='*.data path')
     parser.add_argument('--batch-size', type=int, default=32, help='size of each image batch')
     parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.001, help='object confidence threshold')
