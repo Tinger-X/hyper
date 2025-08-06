@@ -102,16 +102,9 @@ def create_dataloader(
     # Make sure only the first process in DDP process the dataset first, and the following others can use the cache
     with torch_utils_re.torch_distributed_zero_first(rank):
         dataset = LoadImagesAndLabels(
-            path, img_size, batch_size,
-            augment=augment,  # augment images
-            hyper=hyper,  # augmentation hyperparameters
-            rect=rect,  # rectangular training
-            cache_images=cache,
-            single_cls=opt.single_cls,
-            stride=int(stride),
-            pad=pad,
-            image_weights=image_weights,
-            prefix=prefix
+            path, img_size, batch_size, augment=augment, hyper=hyper,
+            rect=rect, cache_images=cache, single_cls=opt.single_cls,
+            stride=int(stride), pad=pad, image_weights=image_weights, prefix=prefix
         )
 
     batch_size = min(batch_size, len(dataset))
@@ -278,9 +271,6 @@ class LoadWebcam:  # for inference
 
         if pipe.isnumeric():
             pipe = eval(pipe)  # local camera
-        # pipe = "rtsp://192.168.1.64/1"  # IP camera
-        # pipe = "rtsp://username:password@192.168.1.64/1"  # IP camera with login
-        # pipe = "http://wmccpinetop.axiscam.net/mjpg/video.mjpg"  # IP golf camera
 
         self.pipe = pipe
         self.cap = cv2.VideoCapture(pipe)  # video capture object
@@ -427,7 +417,8 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
         self.hyper = hyper
         self.image_weights = image_weights
         self.rect = False if image_weights else rect
-        self.mosaic = self.augment and not self.rect  # load 4 images at a time into a mosaic (only during training)
+        # load 4 images at a time into a mosaic (only during training)
+        self.mosaic = self.augment and not self.rect
         self.mosaic_border = [-img_size // 2, -img_size // 2]
         self.stride = stride
         self.path = path
@@ -737,7 +728,8 @@ class LoadMultiModalImagesAndLabels(Dataset):  # for training/testing
         self.hyper = hyper
         self.image_weights = image_weights
         self.rect = False if image_weights else rect
-        self.mosaic = self.augment and not self.rect  # load 4 images at a time into a mosaic (only during training)
+        # load 4 images at a time into a mosaic (only during training)
+        self.mosaic = self.augment and not self.rect
         self.mosaic_border = [-img_size // 2, -img_size // 2]
         self.stride = stride
         self.path_rgb = path_rgb

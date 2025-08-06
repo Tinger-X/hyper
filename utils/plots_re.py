@@ -1,19 +1,20 @@
+import os
+import cv2
 import glob
 import math
-import os
+import yaml
+import torch
 import random
-from copy import copy
-from pathlib import Path
-import cv2
 import matplotlib
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import torch
-import yaml
-from PIL import Image, ImageDraw, ImageFont
+from copy import copy
+from pathlib import Path
+import matplotlib.pyplot as plt
 from scipy.signal import butter, filtfilt
+from PIL import Image, ImageDraw, ImageFont
+
 from utils import utils_re, metrics_re
 
 # Settings
@@ -48,14 +49,17 @@ def hist2d(x, y, n=100):
     return np.log(hist[xidx, yidx])
 
 
+def butter_lowpass(cutoff, fs, order):
+    nyq = 0.5 * fs
+    normal_cutoff = cutoff / nyq
+    return butter(order, normal_cutoff, btype="low", analog=False)
+
+
 def butter_lowpass_filtfilt(data, cutoff=1500, fs=50000, order=5):
     # https://stackoverflow.com/questions/28536191/how-to-filter-smooth-with-scipy-numpy
-    def butter_lowpass(cutoff, fs, order):
-        nyq = 0.5 * fs
-        normal_cutoff = cutoff / nyq
-        return butter(order, normal_cutoff, btype="low", analog=False)
-
-    b, a = butter_lowpass(cutoff, fs, order=order)
+    nyq = 0.5 * fs
+    normal_cutoff = cutoff / nyq
+    b, a = butter(order, normal_cutoff, btype="low", analog=False)
     return filtfilt(b, a, data)  # forward-backward filter
 
 

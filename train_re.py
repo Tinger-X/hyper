@@ -405,7 +405,7 @@ def train(hyper, args, tb_writer):
             wandb_logger.end_epoch(best_result=best_fitness == fi)
 
             # Save model
-            if (not args.nosave) or (final_epoch and not args.evolve):  # if save
+            if (not args.no_save) or (final_epoch and not args.evolve):  # if save
                 ckpt = {
                     "epoch": epoch,
                     "best_fitness": best_fitness,
